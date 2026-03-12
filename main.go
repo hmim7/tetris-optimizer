@@ -14,20 +14,30 @@ func main() {
 	}
 
 	// Parse tetrominoes
-	tetrominoes, err := input.ParseTetrominoes(content)
+	tetrominoStrings, err := input.ParseTetrominoes(content)
 	if err != nil {
 		fmt.Println("ERROR")
 		os.Exit(1)
 	}
 
 	// Validate tetrominoes format
-	err = input.ValidateTetrominoes(tetrominoes)
+	err = input.ValidateTetrominoes(tetrominoStrings)
 	if err != nil {
 		fmt.Println("ERROR")
 		os.Exit(1)
 	}
 
-	// For now, just print that we successfully validated the tetrominoes
-	// This will be replaced with the full pipeline in later tasks
-	fmt.Printf("Successfully validated %d tetrominoes\n", len(tetrominoes))
+	// Create tetromino models
+	var tetrominoes []*input.Tetromino
+	for _, tetrominoStr := range tetrominoStrings {
+		tetromino := input.NewTetromino(tetrominoStr)
+		tetrominoes = append(tetrominoes, tetromino)
+	}
+
+	// For now, just print that we successfully created the models
+	// This will be replaced with the solver in later tasks
+	fmt.Printf("Successfully created %d tetromino models\n", len(tetrominoes))
+	for i, t := range tetrominoes {
+		fmt.Printf("Tetromino %d: %dx%d\n", i+1, t.Width(), t.Height())
+	}
 }
