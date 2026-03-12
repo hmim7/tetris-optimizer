@@ -1,0 +1,166 @@
+package unittests
+
+import (
+	"testing"
+	"tetris-optimizer/modules"
+)
+
+func TestValidateTetromino_ValidBlock(t *testing.T) {
+	validTetromino := "....\n.##.\n.##.\n...."
+
+	err := input.ValidateTetromino(validTetromino)
+
+	if err != nil {
+		t.Errorf("Expected no error for valid tetromino, got: %v", err)
+	}
+}
+
+func TestValidateTetromino_InvalidCharacters(t *testing.T) {
+	tests := []struct {
+		name      string
+		tetromino string
+	}{
+		{
+			name:      "Numbers",
+			tetromino: "...1\n...#\n...#\n...#",
+		},
+		{
+			name:      "Spaces",
+			tetromino: "... \n...#\n...#\n...#",
+		},
+		{
+			name:      "Tabs",
+			tetromino: "...\t\n...#\n...#\n...#",
+		},
+		{
+			name:      "Letters",
+			tetromino: "...A\n...#\n...#\n...#",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			err := input.ValidateTetromino(tt.tetromino)
+			if err == nil {
+				t.Errorf("Expected error for invalid character in %s", tt.name)
+			}
+		})
+	}
+}
+
+func TestValidateTetromino_InvalidLineLength(t *testing.T) {
+	tests := []struct {
+		name      string
+		tetromino string
+	}{
+		{
+			name:      "Line too short",
+			tetromino: "...\n...#\n...#\n...#",
+		},
+		{
+			name:      "Line too long",
+			tetromino: ".....\n...#.\n...#.\n...#.",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			err := input.ValidateTetromino(tt.tetromino)
+			if err == nil {
+				t.Errorf("Expected error for invalid line length in %s", tt.name)
+			}
+		})
+	}
+}
+
+func TestValidateTetromino_InvalidBlockHeight(t *testing.T) {
+	tests := []struct {
+		name      string
+		tetromino string
+	}{
+		{
+			name:      "Too few lines",
+			tetromino: "...#\n...#\n...#",
+		},
+		{
+			name:      "Too many lines",
+			tetromino: "...#\n...#\n...#\n...#\n....",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			err := input.ValidateTetromino(tt.tetromino)
+			if err == nil {
+				t.Errorf("Expected error for invalid block height in %s", tt.name)
+			}
+		})
+	}
+}
+
+func TestValidateTetromino_InvalidBlockCount(t *testing.T) {
+	tests := []struct {
+		name      string
+		tetromino string
+	}{
+		{
+			name:      "Too few blocks",
+			tetromino: "....\n.##.\n....\n....",
+		},
+		{
+			name:      "Too many blocks",
+			tetromino: "####\n####\n....\n....",
+		},
+		{
+			name:      "No blocks",
+			tetromino: "....\n....\n....\n....",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			err := input.ValidateTetromino(tt.tetromino)
+			if err == nil {
+				t.Errorf("Expected error for invalid block count in %s", tt.name)
+			}
+		})
+	}
+}
+
+func TestValidateTetrominoes_ValidMultiple(t *testing.T) {
+	tetrominoes := []string{
+		"....\n.##.\n.##.\n....",
+		"...#\n...#\n...#\n...#",
+		"....\n....\n....\n####",
+	}
+
+	err := input.ValidateTetrominoes(tetrominoes)
+
+	if err != nil {
+		t.Errorf("Expected no error for valid tetrominoes, got: %v", err)
+	}
+}
+
+func TestValidateTetrominoes_EmptyArray(t *testing.T) {
+	var tetrominoes []string
+
+	err := input.ValidateTetrominoes(tetrominoes)
+
+	if err == nil {
+		t.Error("Expected error for empty tetrominoes array")
+	}
+}
+
+func TestValidateTetrominoes_InvalidInArray(t *testing.T) {
+	tetrominoes := []string{
+		"....\n.##.\n.##.\n....",
+		"...1\n...#\n...#\n...#", // Invalid character
+		"....\n....\n....\n####",
+	}
+
+	err := input.ValidateTetrominoes(tetrominoes)
+
+	if err == nil {
+		t.Error("Expected error for invalid tetromino in array")
+	}
+}
