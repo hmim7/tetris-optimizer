@@ -1,9 +1,9 @@
-package main
+package unittests
 
 import (
 	"os"
 	"testing"
-	"tetris-optimizer/modules"
+	input "tetris-optimizer/modules"
 )
 
 func TestValidateArgs(t *testing.T) {
@@ -53,9 +53,9 @@ func TestValidateArgs(t *testing.T) {
 }
 
 func TestReadFile(t *testing.T) {
-	// Create a temporary test file
+	// Create a temporary test file with valid content
 	testFile := "test_temp.txt"
-	testContent := "test content"
+	testContent := "...#\n...#\n...#\n...#"
 	err := os.WriteFile(testFile, []byte(testContent), 0644)
 	if err != nil {
 		t.Fatalf("Failed to create test file: %v", err)
@@ -69,6 +69,33 @@ func TestReadFile(t *testing.T) {
 		t.Fatalf("Failed to create empty test file: %v", err)
 	}
 	defer os.Remove(emptyFile)
+
+	// Create a binary file with null bytes
+	binaryFile := "binary_temp.txt"
+	binaryContent := []byte{0x00, 0x01, 0x02, 0x03}
+	err = os.WriteFile(binaryFile, binaryContent, 0644)
+	if err != nil {
+		t.Fatalf("Failed to create binary test file: %v", err)
+	}
+	defer os.Remove(binaryFile)
+
+	// Create a file with invalid characters
+	invalidFile := "invalid_temp.txt"
+	invalidContent := "...#\n@@@#\n...#\n...#"
+	err = os.WriteFile(invalidFile, []byte(invalidContent), 0644)
+	if err != nil {
+		t.Fatalf("Failed to create invalid test file: %v", err)
+	}
+	defer os.Remove(invalidFile)
+
+	// Create a file with Windows line endings
+	windowsFile := "windows_temp.txt"
+	windowsContent := "...#\r\n...#\r\n...#\r\n...#"
+	err = os.WriteFile(windowsFile, []byte(windowsContent), 0644)
+	if err != nil {
+		t.Fatalf("Failed to create Windows test file: %v", err)
+	}
+	defer os.Remove(windowsFile)
 
 	tests := []struct {
 		name     string
@@ -92,6 +119,22 @@ func TestReadFile(t *testing.T) {
 			filename: "nonexistent.txt",
 			wantErr:  true,
 		},
+		{
+			name:     "Binary file with null bytes",
+			filename: binaryFile,
+			wantErr:  true,
+		},
+		{
+			name:     "File with invalid characters",
+			filename: invalidFile,
+			wantErr:  true,
+		},
+		{
+			name:     "Windows line endings (normalized)",
+			filename: windowsFile,
+			wantErr:  false,
+			expected: "...#\n...#\n...#\n...#",
+		},
 	}
 
 	for _, tt := range tests {
@@ -102,16 +145,16 @@ func TestReadFile(t *testing.T) {
 				return
 			}
 			if !tt.wantErr && result != tt.expected {
-				t.Errorf("ReadFile() = %v, want %v", result, tt.expected)
+				t.Errorf("ReadFile() = %q, want %q", result, tt.expected)
 			}
 		})
 	}
 }
 
 func TestProcessInput(t *testing.T) {
-	// Create a temporary test file
+	// Create a temporary test file with valid tetromino content
 	testFile := "test_process.txt"
-	testContent := "process test content"
+	testContent := "...#\n...#\n...#\n...#"
 	err := os.WriteFile(testFile, []byte(testContent), 0644)
 	if err != nil {
 		t.Fatalf("Failed to create test file: %v", err)
@@ -162,7 +205,7 @@ func TestProcessInput(t *testing.T) {
 				return
 			}
 			if !tt.wantErr && result != tt.expected {
-				t.Errorf("ProcessInput() = %v, want %v", result, tt.expected)
+				t.Errorf("ProcessInput() = %q, want %q", result, tt.expected)
 			}
 		})
 	}

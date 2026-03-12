@@ -3,6 +3,7 @@ package input
 import (
 	"fmt"
 	"os"
+	"strings"
 )
 
 // ValidateArgs validates command line arguments and returns the filename
@@ -37,7 +38,28 @@ func ReadFile(filename string) (string, error) {
 		return "", fmt.Errorf("file read error")
 	}
 
-	return string(content), nil
+	// Check for null bytes (binary file detection)
+	for _, b := range content {
+		if b == 0 {
+			return "", fmt.Errorf("binary file detected")
+		}
+	}
+
+	// Convert to string and validate content
+	contentStr := string(content)
+
+	// Check for valid characters only (., #, newline)
+	for _, char := range contentStr {
+		if char != '.' && char != '#' && char != '\n' && char != '\r' {
+			return "", fmt.Errorf("invalid characters in file")
+		}
+	}
+
+	// Normalize line endings (convert \r\n to \n)
+	contentStr = strings.ReplaceAll(contentStr, "\r\n", "\n")
+	contentStr = strings.ReplaceAll(contentStr, "\r", "\n")
+
+	return contentStr, nil
 }
 
 // ProcessInput handles the complete input validation and reading pipeline

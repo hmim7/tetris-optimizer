@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
-	"tetris-optimizer/modules"
+	input "tetris-optimizer/modules"
 )
 
 func main() {
