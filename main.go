@@ -3,28 +3,17 @@ package main
 import (
 	"fmt"
 	"os"
+	"tetris-optimizer/modules"
 )
 
 func main() {
-	// Check if exactly one argument (the file path) is provided
-	// os.Args is the program name, so we expect len to be 2
-	if len(os.Args) != 2 {
-		fmt.Println("ERROR")
-		return
-	}
-
-	filePath := os.Args[5]
-
-	// Attempt to open the file
-	file, err := os.Open(filePath)
+	content, err := input.ProcessInput()
 	if err != nil {
-		// If the file cannot be read, print ERROR and exit
 		fmt.Println("ERROR")
-		return
+		os.Exit(1)
 	}
 
-	// Ensure the file is closed when the function finishes
-	defer file.Close()
-
-	// Process the file (Milestone 2 will follow here)
+	// For now, just print that we successfully read the file
+	// This will be replaced with the full pipeline in later tasks
+	fmt.Printf("Successfully read file with %d characters\n", len(content))
 }
