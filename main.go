@@ -13,7 +13,14 @@ func main() {
 		os.Exit(1)
 	}
 
-	// For now, just print that we successfully read the file
+	// Parse tetrominoes
+	tetrominoes, err := input.ParseTetrominoes(content)
+	if err != nil {
+		fmt.Println("ERROR")
+		os.Exit(1)
+	}
+
+	// For now, just print that we successfully parsed the tetrominoes
 	// This will be replaced with the full pipeline in later tasks
-	fmt.Printf("Successfully read file with %d characters\n", len(content))
+	fmt.Printf("Successfully parsed %d tetrominoes\n", len(tetrominoes))
 }
