@@ -164,3 +164,54 @@ func TestValidateTetrominoes_InvalidInArray(t *testing.T) {
 		t.Error("Expected error for invalid tetromino in array")
 	}
 }
+
+func TestValidateTetromino_ConnectedBlocks(t *testing.T) {
+	tests := []struct {
+		name      string
+		tetromino string
+		expected  bool
+	}{
+		{
+			name:      "Valid L-shape",
+			tetromino: "#...\n#...\n##..\n....",
+			expected:  true,
+		},
+		{
+			name:      "Valid I-shape",
+			tetromino: "....\n####\n....\n....",
+			expected:  true,
+		},
+		{
+			name:      "Valid square",
+			tetromino: "....\n.##.\n.##.\n....",
+			expected:  true,
+		},
+		{
+			name:      "Disconnected pairs",
+			tetromino: "##..\n....\n..##\n....",
+			expected:  false,
+		},
+		{
+			name:      "Diagonal only",
+			tetromino: "#...\n.#..\n..#.\n...#",
+			expected:  false,
+		},
+		{
+			name:      "Vertical gap",
+			tetromino: "#...\n....\n#...\n##..",
+			expected:  false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			err := input.ValidateTetromino(tt.tetromino)
+			if tt.expected && err != nil {
+				t.Errorf("Expected valid tetromino for %s, got error: %v", tt.name, err)
+			}
+			if !tt.expected && err == nil {
+				t.Errorf("Expected invalid tetromino for %s, got no error", tt.name)
+			}
+		})
+	}
+}
