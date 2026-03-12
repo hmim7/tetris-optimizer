@@ -1,0 +1,36 @@
+TASK ID: TASK04
+TITLE: Format Validator for Grid Dimensions and Character Set
+PRIORITY: High
+STATUS: TODO
+
+DESCRIPTION:
+Implement strict format validation for tetromino blocks including grid dimensions (4x4), character set validation (only #, ., \n), line length checking, and block count validation (exactly 4 # per block). This is critical for ensuring input contract compliance.
+
+REQUIREMENTS:
+- Validate each block is exactly 4 lines of 4 characters
+- Check character set contains only #, ., and \n
+- Count exactly 4 # characters per tetromino
+- Detect invalid characters (tabs, spaces, numbers, etc.)
+- Validate line lengths and block heights
+- Standard library only
+
+FILES TO CREATE/MODIFY:
+- modules/validator.go
+- unit-tests/validator_test.go
+
+GOLDEN TESTS / ACCEPTANCE CRITERIA:
+- Input: `samples/invalid_chars_tabs.txt` -> Expected: `ERROR`
+- Input: `samples/invalid_chars_spaces.txt` -> Expected: `ERROR`
+- Input: `samples/invalid_chars_numbers.txt` -> Expected: `ERROR`
+- Input: `samples/incorrect_line_length_long.txt` -> Expected: `ERROR`
+- Input: `samples/incorrect_line_length_short.txt` -> Expected: `ERROR`
+- Input: `samples/incorrect_block_height_long.txt` -> Expected: `ERROR`
+- Input: `samples/badexample00.txt` -> Expected: `ERROR` (too many blocks)
+- Input: `samples/too_few_blocks.txt` -> Expected: `ERROR`
+- Input: Valid 4x4 block with 4 # -> Expected: Pass validation
+
+DEFINITION OF DONE:
+- Unit tests pass for all format validation cases
+- gofmt applied
+- Performance requirements met for validation speed
+- Clear error detection for each validation rule

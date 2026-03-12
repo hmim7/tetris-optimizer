@@ -1,0 +1,34 @@
+TASK ID: TASK09
+TITLE: Integration Testing and Golden Test Validation
+PRIORITY: Low
+STATUS: TODO
+
+DESCRIPTION:
+Implement end-to-end integration testing and validate against all golden test cases from docs/golden-tests.md. Must ensure complete pipeline works correctly, all acceptance criteria are met, and performance requirements are satisfied. Final validation before delivery.
+
+REQUIREMENTS:
+- Integrate all modules into main.go pipeline
+- Validate against all golden test cases (6.1-6.8)
+- Verify performance requirements for all test cases
+- Ensure deterministic behavior across runs
+- Complete acceptance criteria validation
+- Standard library only
+
+FILES TO CREATE/MODIFY:
+- main.go
+- unit-tests/integration_test.go
+
+GOLDEN TESTS / ACCEPTANCE CRITERIA:
+- All cases from PRD.md section 6.1-6.8 must pass
+- Performance: 8 tetros ≤1s, 11 tetros ≤3s, 12 tetros ≤5s
+- Error cases: All output exactly `ERROR`
+- Output format: Correct letter assignment and dimensions
+- Build verification: Clean compilation and formatting
+- Coverage: Minimum 90% test coverage
+
+DEFINITION OF DONE:
+- All golden tests pass
+- gofmt applied
+- Performance requirements met
+- Complete pipeline integration working
+- README updated with usage examples

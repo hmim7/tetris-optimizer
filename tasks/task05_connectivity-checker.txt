@@ -1,0 +1,33 @@
+TASK ID: TASK05
+TITLE: Connectivity Checker for Tetromino Shape Validation
+PRIORITY: Medium
+STATUS: TODO
+
+DESCRIPTION:
+Implement connectivity validation using flood fill or adjacency counting to ensure all 4 blocks in each tetromino are connected edge-to-edge. Must reject diagonal-only connections and disconnected shapes. This ensures geometric integrity of tetromino shapes.
+
+REQUIREMENTS:
+- Implement flood fill algorithm for connectivity checking
+- Validate edge-to-edge connections (no diagonal-only)
+- Detect disconnected shapes and separate block groups
+- Count minimum 6 adjacencies for valid 4-block tetromino
+- Reject shapes with gaps or isolated blocks
+- Standard library only
+
+FILES TO CREATE/MODIFY:
+- modules/validator.go (extend from Task04)
+- unit-tests/validator_test.go (extend from Task04)
+
+GOLDEN TESTS / ACCEPTANCE CRITERIA:
+- Input: `samples/badexample01.txt` -> Expected: `ERROR` (diagonal only)
+- Input: `samples/badexample04.txt` -> Expected: `ERROR` (disconnected pairs)
+- Input: `samples/badexample02.txt` -> Expected: `ERROR` (vertical gap)
+- Input: `samples/badexample03.txt` -> Expected: `ERROR` (zero blocks)
+- Input: `samples/only_dots.txt` -> Expected: `ERROR`
+- Input: Valid connected tetromino -> Expected: Pass validation
+
+DEFINITION OF DONE:
+- Unit tests pass for all connectivity cases
+- gofmt applied
+- Efficient flood fill implementation
+- Integration with format validation from Task04

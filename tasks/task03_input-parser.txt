@@ -1,0 +1,33 @@
+TASK ID: TASK03
+TITLE: Input Parser for Tetromino Block Splitting
+PRIORITY: Medium
+STATUS: TODO
+
+DESCRIPTION:
+Implement parser module that splits raw input content into individual 4x4 tetromino blocks. Must handle separator validation (exactly one empty line between blocks) and detect structural format errors. This module prepares individual blocks for validation in Task04.
+
+REQUIREMENTS:
+- Split input into 4x4 tetromino blocks
+- Validate exactly one empty line between blocks
+- Detect leading/trailing newlines
+- Handle incomplete blocks at EOF
+- Reject multiple separators or missing separators
+- Standard library only
+
+FILES TO CREATE/MODIFY:
+- modules/parser.go
+- unit-tests/parser_test.go
+
+GOLDEN TESTS / ACCEPTANCE CRITERIA:
+- Input: Valid separated blocks -> Expected: Array of 4x4 string blocks
+- Input: `samples/missing_separator.txt` -> Expected: `ERROR`
+- Input: `samples/badformat.txt` -> Expected: `ERROR`
+- Input: `samples/leading_newline.txt` -> Expected: `ERROR`
+- Input: `samples/trailing_newlines.txt` -> Expected: `ERROR`
+- Input: `samples/half_block_eof.txt` -> Expected: `ERROR`
+
+DEFINITION OF DONE:
+- Unit tests pass for all separator error cases
+- gofmt applied
+- Clean separation of parsing logic from validation
+- Proper error detection for malformed structure

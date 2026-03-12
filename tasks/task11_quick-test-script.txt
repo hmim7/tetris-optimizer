@@ -1,0 +1,34 @@
+TASK ID: TASK11
+TITLE: Quick Test Script for Final Validation
+PRIORITY: Low
+STATUS: TODO
+
+DESCRIPTION:
+Create quick-test.sh script for rapid validation of all core functionality, error cases, and performance requirements. This script should run all golden test cases automatically and provide clear pass/fail feedback. Must be executable and provide comprehensive coverage of acceptance criteria.
+
+REQUIREMENTS:
+- Test all core functionality cases (goodexample00-03, hardexam)
+- Test all error cases (badexample00-04, format errors, CLI errors)
+- Measure and validate performance requirements
+- Provide clear pass/fail output with timing information
+- Test build verification and formatting checks
+- Executable shell script for quick validation
+- Standard library only
+
+FILES TO CREATE/MODIFY:
+- quick-test.sh
+
+GOLDEN TESTS / ACCEPTANCE CRITERIA:
+- Input: `./quick-test.sh` -> Expected: All tests run automatically
+- Input: Core functionality tests -> Expected: Correct square outputs
+- Input: Error case tests -> Expected: All output exactly ERROR
+- Input: Performance tests -> Expected: Time limits validated
+- Input: Build tests -> Expected: Clean compilation and formatting
+- Input: Final summary -> Expected: Clear pass/fail report
+
+DEFINITION OF DONE:
+- Script tests all acceptance criteria from PRD.md sections 6.1-6.8
+- Performance timing validation included
+- Clear output formatting with pass/fail indicators
+- Script is executable and runs without manual intervention
+- Comprehensive coverage of all golden test cases

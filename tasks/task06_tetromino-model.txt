@@ -1,0 +1,32 @@
+TASK ID: TASK06
+TITLE: Tetromino Model and Coordinate Normalization
+PRIORITY: Low
+STATUS: TODO
+
+DESCRIPTION:
+Implement tetromino domain model that represents validated tetrominoes as collections of 2D coordinates. Must normalize each tetromino so top-left block aligns at origin (0,0) and provide helper methods for width/height calculations. This prepares tetrominoes for solver placement.
+
+REQUIREMENTS:
+- Represent tetrominoes as coordinate collections
+- Normalize coordinates to origin (0,0) alignment
+- Provide Width() and Height() helper methods
+- Handle coordinate transformations for placement
+- Support tetromino positioning and bounds checking
+- Standard library only
+
+FILES TO CREATE/MODIFY:
+- modules/model.go
+- unit-tests/model_test.go
+
+GOLDEN TESTS / ACCEPTANCE CRITERIA:
+- Input: 4x4 tetromino block -> Expected: Normalized coordinate set
+- Input: Non-standard placement tetromino -> Expected: Proper normalization
+- Input: Various tetromino shapes -> Expected: Correct width/height calculations
+- Input: Coordinate transformations -> Expected: Accurate positioning
+- Input: Bounds checking -> Expected: Valid placement detection
+
+DEFINITION OF DONE:
+- Unit tests pass for normalization and calculations
+- gofmt applied
+- Clean separation from solver logic
+- Efficient coordinate operations

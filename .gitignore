@@ -1,0 +1,21 @@
+# === Go ===
+# Ignore executable files (Binaries)
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+# the current building program
+tetris-optimizer
+
+# === VS Code ===
+.vscode/
+*.code-workspace
+
+# === OS Files ===
+Thumbs.db
+.DS_Store
+
+# === Logs ===
+*.log
+temp/

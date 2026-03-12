@@ -1,0 +1,32 @@
+TASK ID: TASK08
+TITLE: Output Renderer and Letter Assignment
+PRIORITY: Medium
+STATUS: TODO
+
+DESCRIPTION:
+Implement output rendering module that converts solved board into textual representation with proper letter assignment (A-Z based on input order), empty space handling, and formatting. Must ensure no trailing spaces and proper newline termination.
+
+REQUIREMENTS:
+- Convert solved board to textual output
+- Assign uppercase letters A-Z based on input file order
+- Fill empty spaces with '.' character
+- Ensure no trailing spaces on lines
+- Proper newline termination
+- Standard library only
+
+FILES TO CREATE/MODIFY:
+- modules/output.go
+- unit-tests/output_test.go
+
+GOLDEN TESTS / ACCEPTANCE CRITERIA:
+- Input: Solved board -> Expected: Properly formatted square output
+- Input: Board with gaps -> Expected: Dots in empty spaces
+- Input: Multiple tetrominoes -> Expected: Sequential letter assignment (A, B, C, D)
+- Input: Single tetromino -> Expected: All positions filled with 'A'
+- Input: Line ending validation -> Expected: No trailing spaces
+
+DEFINITION OF DONE:
+- Unit tests pass for output formatting
+- gofmt applied
+- Correct letter assignment in input order
+- Clean output formatting without trailing spaces

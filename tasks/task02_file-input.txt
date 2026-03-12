@@ -1,0 +1,32 @@
+TASK ID: TASK02
+TITLE: File Input Reading and Basic Error Detection
+PRIORITY: Medium
+STATUS: TODO
+
+DESCRIPTION:
+Implement file reading functionality that loads input file contents into memory for processing. This module handles the actual file I/O operations and performs basic content validation before passing data to the parser. Must integrate with CLI validation from Task01.
+
+REQUIREMENTS:
+- Read entire file content into memory
+- Handle file I/O errors gracefully
+- Detect and reject binary files or unsupported formats
+- Preserve original file content for parsing
+- Integrate with CLI validation module
+- Standard library only
+
+FILES TO CREATE/MODIFY:
+- modules/input.go (extend from Task01)
+- unit-tests/input_test.go (extend from Task01)
+
+GOLDEN TESTS / ACCEPTANCE CRITERIA:
+- Input: Valid text file -> Expected: Content loaded as string
+- Input: Binary file -> Expected: `ERROR`
+- Input: File with permission denied -> Expected: `ERROR`
+- Input: Directory instead of file -> Expected: `ERROR`
+- Input: File with null bytes -> Expected: `ERROR`
+
+DEFINITION OF DONE:
+- Unit tests pass for file reading scenarios
+- gofmt applied
+- Integration with Task01 CLI validation
+- Proper error propagation to main pipeline

@@ -1,0 +1,33 @@
+TASK ID: TASK07
+TITLE: Backtracking Solver with Performance Optimization
+PRIORITY: High
+STATUS: TODO
+
+DESCRIPTION:
+Implement core backtracking algorithm for tetromino placement with performance optimizations to meet time requirements (≤1s for 8 pieces, ≤3s for 11 pieces, ≤5s for 12 pieces). Must compute minimal square size, place tetrominoes deterministically, and increment board size when no solution exists.
+
+REQUIREMENTS:
+- Implement depth-first backtracking algorithm
+- Calculate minimal square size based on total blocks
+- Deterministic placement order for consistent results
+- Dynamic board size increment when no solution found
+- Performance optimization with pruning strategies
+- Standard library only
+
+FILES TO CREATE/MODIFY:
+- modules/solver.go
+- unit-tests/solver_test.go
+
+GOLDEN TESTS / ACCEPTANCE CRITERIA:
+- Input: `samples/goodexample00.txt` -> Expected: 2x2 square (≤1s)
+- Input: `samples/goodexample01.txt` -> Expected: 5x5 square with 9 dots (≤1s)
+- Input: `samples/goodexample02.txt` -> Expected: 6x6 square with 4 dots (≤1s)
+- Input: `samples/goodexample03.txt` -> Expected: 7x7 square with 5 dots (≤3s)
+- Input: `samples/hardexam.txt` -> Expected: 7x7 square with 1 dot (≤5s)
+- Input: Single tetromino -> Expected: Minimal rectangle solution
+
+DEFINITION OF DONE:
+- Unit tests pass for all solver scenarios
+- gofmt applied
+- Performance requirements met for all test cases
+- Deterministic and consistent output
