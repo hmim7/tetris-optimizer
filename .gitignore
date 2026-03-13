@@ -5,8 +5,11 @@
 *.dll
 *.so
 *.dylib
+
 # the current building program
 tetris-optimizer
+*.gocache
+Tetris-Intra.md
 
 # === VS Code ===
 .vscode/

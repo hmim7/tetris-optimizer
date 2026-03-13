@@ -15,33 +15,65 @@ go run . <inputFile>
 ### Example
 
 ```bash
-go run . samples/sample1.txt
+go run . sample.txt
 ```
 
-**Input (`sample1.txt`):**
+**Input (`sample.txt`):**
 ```
 ...#
 ...#
 ...#
 ...#
 
+....
+....
+....
 ####
+
+.###
+...#
 ....
 ....
+
+....
+..##
+.##.
+....
+
+....
+.##.
+.##.
+....
+
+....
+....
+##..
+.##.
+
+##..
+.#..
+.#..
+....
+
+....
+###.
+.#..
 ....
 ```
 
-**Output:**
+**Expected Output:**
 ```
-ABBB
-ABBB
-A...
-A...
+ABBBB.
+ACCCEE
+AFFCEE
+A.FFGG
+HHHDDG
+.HDD.G
 ```
 
 ## Input Format
 
-- Each tetromino is defined in a **4×4 grid**
+- Each tetromino is defined in a **4x4 grid**
 - Use `#` for blocks and `.` for empty spaces
 - Separate tetrominoes with **exactly one empty line**
 - Each tetromino must contain **exactly 4 blocks** that are **connected by shared edges**
@@ -77,7 +109,7 @@ The program outputs `ERROR` and exits for:
 - File not found or permission denied
 - Empty file
 - Invalid characters (only `#`, `.`, and newline allowed)
-- Incorrect grid dimensions (must be 4×4)
+- Incorrect grid dimensions (must be 4x4)
 - Invalid block count (must be exactly 4 `#` per tetromino)
 - Disconnected blocks (diagonal-only connections invalid)
 - Missing or multiple separator lines between tetrominoes
@@ -97,7 +129,7 @@ The solver uses **depth-first backtracking**:
 The program follows a modular pipeline architecture:
 
 ```
-CLI Args → Input Reader → Parser → Validator → Solver → Output
+CLI Args -> Input Reader -> Parser -> Validator -> Solver -> Output
 ```
 
 ### Key Modules
@@ -121,9 +153,26 @@ CLI Args → Input Reader → Parser → Validator → Solver → Output
 Run the program against provided test cases:
 
 ```bash
-go run . samples/sample1.txt
-go run . samples/sample2.txt
-go run . samples/invalid.txt
+go run . sample.txt
+go run . samples/hardexam.txt
 ```
+- ***Errored cases:***
 
-Expected behavior matches specifications in `documentation/PRD.md`.
+    ```bash
+    go run . samples/empty_file.txt
+    go run . samples/invalid_chars_tabs.txt
+    go run . samples/invalid_chars_spaces.txt
+    go run . samples/invalid_chars_numbers.txt
+    go run . samples/incorrect_line_length_long.txt
+    go run . samples/incorrect_line_length_short.txt
+    go run . samples/incorrect_block_height_long.txt
+    go run . samples/incorrect_block_height_short.txt
+    go run . samples/missing_separator.txt
+    go run . samples/leading_newline.txt
+    go run . samples/trailing_newlines.txt
+    go run . samples/half_block_eof.txt
+    go run . samples/ghost_block_trailing.txt
+    go run . samples/non_uniform_blocks.txt
+    ```
+
+Expected behavior matches specifications in `docs/PRD.md`.
