@@ -1,7 +1,7 @@
 TASK ID: TASK06
 TITLE: Tetromino Model and Coordinate Normalization
 PRIORITY: Low
-STATUS: TODO
+STATUS: DONE
 
 DESCRIPTION:
 Implement tetromino domain model that represents validated tetrominoes as collections of 2D coordinates. Must normalize each tetromino so top-left block aligns at origin (0,0) and provide helper methods for width/height calculations. This prepares tetrominoes for solver placement.

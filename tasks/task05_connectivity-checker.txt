@@ -1,7 +1,7 @@
 TASK ID: TASK05
 TITLE: Connectivity Checker for Tetromino Shape Validation
 PRIORITY: Medium
-STATUS: TODO
+STATUS: DONE
 
 DESCRIPTION:
 Implement connectivity validation using flood fill or adjacency counting to ensure all 4 blocks in each tetromino are connected edge-to-edge. Must reject diagonal-only connections and disconnected shapes. This ensures geometric integrity of tetromino shapes.

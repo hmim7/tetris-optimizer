@@ -1,7 +1,7 @@
 TASK ID: TASK04
 TITLE: Format Validator for Grid Dimensions and Character Set
 PRIORITY: High
-STATUS: TODO
+STATUS: DONE
 
 DESCRIPTION:
 Implement strict format validation for tetromino blocks including grid dimensions (4x4), character set validation (only #, ., \n), line length checking, and block count validation (exactly 4 # per block). This is critical for ensuring input contract compliance.
