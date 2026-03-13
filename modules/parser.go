@@ -1,4 +1,4 @@
-package input
+package modules
 
 import (
 	"strings"
@@ -15,10 +15,8 @@ func ParseTetrominoes(content string) ([]string, error) {
 		return nil, &ParseError{"leading newlines not allowed"}
 	}
 
-	// Remove single trailing newline if present
-	if strings.HasSuffix(content, "\n") {
-		content = strings.TrimSuffix(content, "\n")
-	}
+	// Remove single trailing newline if present (TrimSuffix handles the check automatically)
+	content = strings.TrimSuffix(content, "\n")
 
 	// Check for multiple trailing newlines after removing one
 	if strings.HasSuffix(content, "\n") {
@@ -39,24 +37,27 @@ func ParseTetrominoes(content string) ([]string, error) {
 			return nil, &ParseError{"multiple separators found"}
 		}
 
-		lines := strings.Split(block, "\n")
-
-		// Each tetromino must have exactly 4 lines
-		if len(lines) != 4 {
-			return nil, &ParseError{"invalid tetromino format"}
-		}
-
-		// Validate each line has exactly 4 characters
-		for _, line := range lines {
-			if len(line) != 4 {
-				return nil, &ParseError{"invalid line length"}
-			}
+		if err := validateBlockDimensions(block); err != nil {
+			return nil, err
 		}
 
 		tetrominoes = append(tetrominoes, block)
 	}
 
 	return tetrominoes, nil
+}
+
+func validateBlockDimensions(block string) error {
+	lines := strings.Split(block, "\n")
+	if len(lines) != 4 {
+		return &ParseError{"invalid line count"}
+	}
+	for _, line := range lines {
+		if len(line) != 4 {
+			return &ParseError{"invalid line length"}
+		}
+	}
+	return nil
 }
 
 // ParseError represents parsing errors

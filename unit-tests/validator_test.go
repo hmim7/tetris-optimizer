@@ -8,7 +8,7 @@ import (
 func TestValidateTetromino_ValidBlock(t *testing.T) {
 	validTetromino := "....\n.##.\n.##.\n...."
 
-	err := input.ValidateTetromino(validTetromino)
+	err := modules.ValidateTetromino(validTetromino)
 
 	if err != nil {
 		t.Errorf("Expected no error for valid tetromino, got: %v", err)
@@ -40,7 +40,7 @@ func TestValidateTetromino_InvalidCharacters(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			err := input.ValidateTetromino(tt.tetromino)
+			err := modules.ValidateTetromino(tt.tetromino)
 			if err == nil {
 				t.Errorf("Expected error for invalid character in %s", tt.name)
 			}
@@ -65,7 +65,7 @@ func TestValidateTetromino_InvalidLineLength(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			err := input.ValidateTetromino(tt.tetromino)
+			err := modules.ValidateTetromino(tt.tetromino)
 			if err == nil {
 				t.Errorf("Expected error for invalid line length in %s", tt.name)
 			}
@@ -90,7 +90,7 @@ func TestValidateTetromino_InvalidBlockHeight(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			err := input.ValidateTetromino(tt.tetromino)
+			err := modules.ValidateTetromino(tt.tetromino)
 			if err == nil {
 				t.Errorf("Expected error for invalid block height in %s", tt.name)
 			}
@@ -119,7 +119,7 @@ func TestValidateTetromino_InvalidBlockCount(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			err := input.ValidateTetromino(tt.tetromino)
+			err := modules.ValidateTetromino(tt.tetromino)
 			if err == nil {
 				t.Errorf("Expected error for invalid block count in %s", tt.name)
 			}
@@ -134,7 +134,7 @@ func TestValidateTetrominoes_ValidMultiple(t *testing.T) {
 		"....\n....\n....\n####",
 	}
 
-	err := input.ValidateTetrominoes(tetrominoes)
+	err := modules.ValidateTetrominoes(tetrominoes)
 
 	if err != nil {
 		t.Errorf("Expected no error for valid tetrominoes, got: %v", err)
@@ -144,7 +144,7 @@ func TestValidateTetrominoes_ValidMultiple(t *testing.T) {
 func TestValidateTetrominoes_EmptyArray(t *testing.T) {
 	var tetrominoes []string
 
-	err := input.ValidateTetrominoes(tetrominoes)
+	err := modules.ValidateTetrominoes(tetrominoes)
 
 	if err == nil {
 		t.Error("Expected error for empty tetrominoes array")
@@ -158,7 +158,7 @@ func TestValidateTetrominoes_InvalidInArray(t *testing.T) {
 		"....\n....\n....\n####",
 	}
 
-	err := input.ValidateTetrominoes(tetrominoes)
+	err := modules.ValidateTetrominoes(tetrominoes)
 
 	if err == nil {
 		t.Error("Expected error for invalid tetromino in array")
@@ -205,7 +205,7 @@ func TestValidateTetromino_ConnectedBlocks(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			err := input.ValidateTetromino(tt.tetromino)
+			err := modules.ValidateTetromino(tt.tetromino)
 			if tt.expected && err != nil {
 				t.Errorf("Expected valid tetromino for %s, got error: %v", tt.name, err)
 			}

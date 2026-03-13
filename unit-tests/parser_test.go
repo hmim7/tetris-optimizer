@@ -8,7 +8,7 @@ import (
 func TestParseTetrominoes_ValidInput(t *testing.T) {
 	testInput := "....\n.##.\n.##.\n...."
 
-	result, err := input.ParseTetrominoes(testInput)
+	result, err := modules.ParseTetrominoes(testInput)
 
 	if err != nil {
 		t.Errorf("Expected no error, got: %v", err)
@@ -26,7 +26,7 @@ func TestParseTetrominoes_ValidInput(t *testing.T) {
 func TestParseTetrominoes_MultipleBlocks(t *testing.T) {
 	testInput := "...#\n...#\n...#\n...#\n\n....\n....\n....\n####"
 
-	result, err := input.ParseTetrominoes(testInput)
+	result, err := modules.ParseTetrominoes(testInput)
 
 	if err != nil {
 		t.Errorf("Expected no error, got: %v", err)
@@ -49,7 +49,7 @@ func TestParseTetrominoes_MultipleBlocks(t *testing.T) {
 }
 
 func TestParseTetrominoes_EmptyInput(t *testing.T) {
-	_, err := input.ParseTetrominoes("")
+	_, err := modules.ParseTetrominoes("")
 
 	if err == nil {
 		t.Error("Expected error for empty input")
@@ -59,7 +59,7 @@ func TestParseTetrominoes_EmptyInput(t *testing.T) {
 func TestParseTetrominoes_LeadingNewline(t *testing.T) {
 	testInput := "\n....\n.##.\n.##.\n...."
 
-	_, err := input.ParseTetrominoes(testInput)
+	_, err := modules.ParseTetrominoes(testInput)
 
 	if err == nil {
 		t.Error("Expected error for leading newline")
@@ -69,7 +69,7 @@ func TestParseTetrominoes_LeadingNewline(t *testing.T) {
 func TestParseTetrominoes_MultipleSeparators(t *testing.T) {
 	testInput := "...#\n...#\n...#\n...#\n\n\n....\n....\n....\n####"
 
-	_, err := input.ParseTetrominoes(testInput)
+	_, err := modules.ParseTetrominoes(testInput)
 
 	if err == nil {
 		t.Error("Expected error for multiple separators")
@@ -79,7 +79,7 @@ func TestParseTetrominoes_MultipleSeparators(t *testing.T) {
 func TestParseTetrominoes_InvalidLineCount(t *testing.T) {
 	testInput := "...#\n...#\n...#"
 
-	_, err := input.ParseTetrominoes(testInput)
+	_, err := modules.ParseTetrominoes(testInput)
 
 	if err == nil {
 		t.Error("Expected error for invalid line count")
@@ -89,7 +89,7 @@ func TestParseTetrominoes_InvalidLineCount(t *testing.T) {
 func TestParseTetrominoes_InvalidLineLength(t *testing.T) {
 	testInput := "...\n...#\n...#\n...#"
 
-	_, err := input.ParseTetrominoes(testInput)
+	_, err := modules.ParseTetrominoes(testInput)
 
 	if err == nil {
 		t.Error("Expected error for invalid line length")
@@ -99,7 +99,7 @@ func TestParseTetrominoes_InvalidLineLength(t *testing.T) {
 func TestParseTetrominoes_MissingSeparator(t *testing.T) {
 	testInput := "...#\n...#\n...#\n...#\n....\n....\n....\n####"
 
-	_, err := input.ParseTetrominoes(testInput)
+	_, err := modules.ParseTetrominoes(testInput)
 
 	if err == nil {
 		t.Error("Expected error for missing separator")
@@ -109,7 +109,7 @@ func TestParseTetrominoes_MissingSeparator(t *testing.T) {
 func TestParseTetrominoes_SingleTrailingNewline(t *testing.T) {
 	testInput := "....\n.##.\n.##.\n....\n"
 
-	result, err := input.ParseTetrominoes(testInput)
+	result, err := modules.ParseTetrominoes(testInput)
 
 	if err != nil {
 		t.Errorf("Expected no error for single trailing newline, got: %v", err)
@@ -123,7 +123,7 @@ func TestParseTetrominoes_SingleTrailingNewline(t *testing.T) {
 func TestParseTetrominoes_MultipleTrailingNewlines(t *testing.T) {
 	testInput := "....\n.##.\n.##.\n....\n\n"
 
-	_, err := input.ParseTetrominoes(testInput)
+	_, err := modules.ParseTetrominoes(testInput)
 
 	if err == nil {
 		t.Error("Expected error for multiple trailing newlines")
@@ -133,7 +133,7 @@ func TestParseTetrominoes_MultipleTrailingNewlines(t *testing.T) {
 func TestParseTetrominoes_HalfBlockEOF(t *testing.T) {
 	testInput := "...#\n...#\n...#\n...#\n\n....\n...."
 
-	_, err := input.ParseTetrominoes(testInput)
+	_, err := modules.ParseTetrominoes(testInput)
 
 	if err == nil {
 		t.Error("Expected error for incomplete block at EOF")

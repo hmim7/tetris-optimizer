@@ -9,12 +9,12 @@ func TestNewTetromino_Normalization(t *testing.T) {
 	tests := []struct {
 		name     string
 		input    string
-		expected []input.Coordinate
+		expected []modules.Coordinate
 	}{
 		{
 			name:  "Square at origin",
 			input: "##..\n##..\n....\n....",
-			expected: []input.Coordinate{
+			expected: []modules.Coordinate{
 				{Row: 0, Col: 0}, {Row: 0, Col: 1},
 				{Row: 1, Col: 0}, {Row: 1, Col: 1},
 			},
@@ -22,7 +22,7 @@ func TestNewTetromino_Normalization(t *testing.T) {
 		{
 			name:  "Square offset - should normalize to origin",
 			input: "....\n.##.\n.##.\n....",
-			expected: []input.Coordinate{
+			expected: []modules.Coordinate{
 				{Row: 0, Col: 0}, {Row: 0, Col: 1},
 				{Row: 1, Col: 0}, {Row: 1, Col: 1},
 			},
@@ -30,7 +30,7 @@ func TestNewTetromino_Normalization(t *testing.T) {
 		{
 			name:  "I-shape horizontal",
 			input: "....\n####\n....\n....",
-			expected: []input.Coordinate{
+			expected: []modules.Coordinate{
 				{Row: 0, Col: 0}, {Row: 0, Col: 1},
 				{Row: 0, Col: 2}, {Row: 0, Col: 3},
 			},
@@ -38,7 +38,7 @@ func TestNewTetromino_Normalization(t *testing.T) {
 		{
 			name:  "I-shape vertical",
 			input: "#...\n#...\n#...\n#...",
-			expected: []input.Coordinate{
+			expected: []modules.Coordinate{
 				{Row: 0, Col: 0}, {Row: 1, Col: 0},
 				{Row: 2, Col: 0}, {Row: 3, Col: 0},
 			},
@@ -46,7 +46,7 @@ func TestNewTetromino_Normalization(t *testing.T) {
 		{
 			name:  "L-shape",
 			input: "#...\n#...\n##..\n....",
-			expected: []input.Coordinate{
+			expected: []modules.Coordinate{
 				{Row: 0, Col: 0}, {Row: 1, Col: 0},
 				{Row: 2, Col: 0}, {Row: 2, Col: 1},
 			},
@@ -55,7 +55,7 @@ func TestNewTetromino_Normalization(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tetromino := input.NewTetromino(tt.input)
+			tetromino := modules.NewTetromino(tt.input)
 
 			if len(tetromino.Blocks) != len(tt.expected) {
 				t.Errorf("Expected %d blocks, got %d", len(tt.expected), len(tetromino.Blocks))
@@ -113,7 +113,7 @@ func TestTetromino_Dimensions(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tetromino := input.NewTetromino(tt.input)
+			tetromino := modules.NewTetromino(tt.input)
 
 			if tetromino.Width() != tt.expectedWidth {
 				t.Errorf("Expected width %d, got %d", tt.expectedWidth, tetromino.Width())
@@ -128,7 +128,7 @@ func TestTetromino_Dimensions(t *testing.T) {
 
 func TestTetromino_CanPlaceAt(t *testing.T) {
 	// Create a simple 2x2 square tetromino
-	tetromino := input.NewTetromino("##..\n##..\n....\n....")
+	tetromino := modules.NewTetromino("##..\n##..\n....\n....")
 
 	tests := []struct {
 		name      string
@@ -186,19 +186,19 @@ func TestTetromino_CanPlaceAt(t *testing.T) {
 
 func TestTetromino_GetAbsoluteCoordinates(t *testing.T) {
 	// Create a simple L-shape tetromino
-	tetromino := input.NewTetromino("#...\n#...\n##..\n....")
+	tetromino := modules.NewTetromino("#...\n#...\n##..\n....")
 
 	tests := []struct {
 		name     string
 		startRow int
 		startCol int
-		expected []input.Coordinate
+		expected []modules.Coordinate
 	}{
 		{
 			name:     "Placement at origin",
 			startRow: 0,
 			startCol: 0,
-			expected: []input.Coordinate{
+			expected: []modules.Coordinate{
 				{Row: 0, Col: 0}, {Row: 1, Col: 0},
 				{Row: 2, Col: 0}, {Row: 2, Col: 1},
 			},
@@ -207,7 +207,7 @@ func TestTetromino_GetAbsoluteCoordinates(t *testing.T) {
 			name:     "Placement offset",
 			startRow: 2,
 			startCol: 3,
-			expected: []input.Coordinate{
+			expected: []modules.Coordinate{
 				{Row: 2, Col: 3}, {Row: 3, Col: 3},
 				{Row: 4, Col: 3}, {Row: 4, Col: 4},
 			},
@@ -233,7 +233,7 @@ func TestTetromino_GetAbsoluteCoordinates(t *testing.T) {
 }
 
 func TestTetromino_EmptyInput(t *testing.T) {
-	tetromino := input.NewTetromino("....\n....\n....\n....")
+	tetromino := modules.NewTetromino("....\n....\n....\n....")
 
 	if len(tetromino.Blocks) != 0 {
 		t.Errorf("Expected 0 blocks for empty input, got %d", len(tetromino.Blocks))

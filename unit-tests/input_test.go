@@ -3,7 +3,7 @@ package unittests
 import (
 	"os"
 	"testing"
-	input "tetris-optimizer/modules"
+	"tetris-optimizer/modules"
 )
 
 func TestValidateArgs(t *testing.T) {
@@ -40,7 +40,7 @@ func TestValidateArgs(t *testing.T) {
 			// Set test args
 			os.Args = tt.args
 
-			result, err := input.ValidateArgs()
+			result, err := modules.ValidateArgs()
 			if (err != nil) != tt.wantErr {
 				t.Errorf("ValidateArgs() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -139,7 +139,7 @@ func TestReadFile(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			result, err := input.ReadFile(tt.filename)
+			result, err := modules.ReadFile(tt.filename)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("ReadFile() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -199,7 +199,7 @@ func TestProcessInput(t *testing.T) {
 			// Set test args
 			os.Args = tt.args
 
-			result, err := input.ProcessInput()
+			result, err := modules.ProcessInput()
 			if (err != nil) != tt.wantErr {
 				t.Errorf("ProcessInput() error = %v, wantErr %v", err, tt.wantErr)
 				return

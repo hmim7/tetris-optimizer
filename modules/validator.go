@@ -1,6 +1,7 @@
-package input
+package modules
 
 import (
+	"fmt"
 	"strings"
 )
 
@@ -12,7 +13,7 @@ func ValidateTetrominoes(tetrominoes []string) error {
 
 	for i, tetromino := range tetrominoes {
 		if err := ValidateTetromino(tetromino); err != nil {
-			return &ValidationError{"tetromino " + string(rune(i+1)) + ": " + err.Error()}
+			return &ValidationError{fmt.Sprintf("tetromino %d: %s", i+1, err.Error())}
 		}
 	}
 

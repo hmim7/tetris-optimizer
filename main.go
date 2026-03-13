@@ -3,34 +3,34 @@ package main
 import (
 	"fmt"
 	"os"
-	input "tetris-optimizer/modules"
+	modules "tetris-optimizer/modules"
 )
 
 func main() {
-	content, err := input.ProcessInput()
+	content, err := modules.ProcessInput()
 	if err != nil {
 		fmt.Println("ERROR")
 		os.Exit(1)
 	}
 
 	// Parse tetrominoes
-	tetrominoStrings, err := input.ParseTetrominoes(content)
+	tetrominoStrings, err := modules.ParseTetrominoes(content)
 	if err != nil {
 		fmt.Println("ERROR")
 		os.Exit(1)
 	}
 
 	// Validate tetrominoes format
-	err = input.ValidateTetrominoes(tetrominoStrings)
+	err = modules.ValidateTetrominoes(tetrominoStrings)
 	if err != nil {
 		fmt.Println("ERROR")
 		os.Exit(1)
 	}
 
 	// Create tetromino models
-	var tetrominoes []*input.Tetromino
+	var tetrominoes []*modules.Tetromino
 	for _, tetrominoStr := range tetrominoStrings {
-		tetromino := input.NewTetromino(tetrominoStr)
+		tetromino := modules.NewTetromino(tetrominoStr)
 		tetrominoes = append(tetrominoes, tetromino)
 	}
 
