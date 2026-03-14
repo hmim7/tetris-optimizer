@@ -40,7 +40,5 @@ func main() {
 		os.Exit(1)
 	}
 
-	for _, line := range solution {
-		fmt.Println(line)
-	}
+	fmt.Print(modules.RenderOutput(solution))
 }
