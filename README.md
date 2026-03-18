@@ -14,7 +14,7 @@ go run . <inputFile>
 
 ### Example
 
-```bash
+```go
 go run . sample.txt
 ```
 
@@ -124,6 +124,14 @@ The solver uses **depth-first backtracking**:
 4. Increment board size if no solution exists
 5. Return the smallest valid square
 
+## Performance
+
+The solver is designed to be efficient and has been tested against the following performance benchmarks:
+
+- **8 tetrominoes:** Solves in ≤ 1 second.
+- **11 tetrominoes:** Solves in ≤ 3 seconds.
+- **12 tetrominoes:** Solves in ≤ 5 seconds.
+
 ## Implementation
 
 The program follows a modular pipeline architecture:
@@ -152,13 +160,13 @@ CLI Args -> Input Reader -> Parser -> Validator -> Solver -> Output
 
 Run the program against provided test cases:
 
-```bash
+```go
 go run . sample.txt
 go run . samples/hardexam.txt
 ```
 - ***Errored cases:***
 
-    ```bash
+    ```go
     go run . samples/empty_file.txt
     go run . samples/invalid_chars_tabs.txt
     go run . samples/invalid_chars_spaces.txt

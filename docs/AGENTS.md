@@ -79,6 +79,10 @@ Before final delivery, follow these phases mapped to PRD milestones.
 - Validate against all test cases in `docs/golden-tests.md`.
 - Confirm acceptance criteria alignment with `docs/PRD.md` section 6.
 - Verify performance meets specified time limits.
+- Ensure all files are properly formatted according to `gofmt`:
+    - list: `gofmt -l .`
+    - fix: `gofmt -w .`
+    ```
 - Update README with usage examples.
 
 ---
