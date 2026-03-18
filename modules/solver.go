@@ -62,6 +62,28 @@ func backtrackPlace(board []byte, size int, pieces []solvePiece, pieceIndex int)
 		return true
 	}
 
+	// For larger boards, choose the most constrained piece among the remaining ones.
+	// This improves performance without affecting small-board deterministic outputs.
+	bestIdx := -1
+	swapped := false
+	if size >= 7 {
+		bestCount := math.MaxInt32
+		for i := pieceIndex; i < len(pieces); i++ {
+			count := possiblePlacementCount(board, size, pieces[i].tetromino)
+			if count == 0 {
+				return false
+			}
+			if bestIdx == -1 || count < bestCount || (count == bestCount && pieces[i].index < pieces[bestIdx].index) {
+				bestCount = count
+				bestIdx = i
+			}
+		}
+		if bestIdx != -1 && bestIdx != pieceIndex {
+			pieces[pieceIndex], pieces[bestIdx] = pieces[bestIdx], pieces[pieceIndex]
+			swapped = true
+		}
+	}
+
 	piece := pieces[pieceIndex]
 	t := piece.tetromino
 
@@ -85,7 +107,26 @@ func backtrackPlace(board []byte, size int, pieces []solvePiece, pieceIndex int)
 		}
 	}
 
+	if swapped {
+		pieces[pieceIndex], pieces[bestIdx] = pieces[bestIdx], pieces[pieceIndex]
+	}
 	return false
+}
+
+// possiblePlacementCount counts how many positions a tetromino can be placed at
+// on the current board state.
+func possiblePlacementCount(board []byte, size int, t *Tetromino) int {
+	count := 0
+	maxRow := size - t.Height()
+	maxCol := size - t.Width()
+	for row := 0; row <= maxRow; row++ {
+		for col := 0; col <= maxCol; col++ {
+			if canPlaceAt(board, size, t, row, col) {
+				count++
+			}
+		}
+	}
+	return count
 }
 
 // canPlaceAt checks if a tetromino's blocks overlap with existing pieces or the board edges.

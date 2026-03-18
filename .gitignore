@@ -9,7 +9,9 @@
 # the current building program
 tetris-optimizer
 *.gocache
-Tetris-Intra.md
+*.guides
+.gitignore
+cover.out
 
 # === VS Code ===
 .vscode/

@@ -6,6 +6,21 @@ import (
 	"strings"
 )
 
+// ProcessInput handles the complete input validation and reading pipeline
+func ProcessInput() (string, error) {
+	filename, err := ValidateArgs()
+	if err != nil {
+		return "", err
+	}
+
+	content, err := ReadFile(filename)
+	if err != nil {
+		return "", err
+	}
+
+	return content, nil
+}
+
 // ValidateArgs validates command line arguments and returns the filename
 func ValidateArgs() (string, error) {
 	if len(os.Args) != 2 {
@@ -60,19 +75,4 @@ func ReadFile(filename string) (string, error) {
 	contentStr = strings.ReplaceAll(contentStr, "\r", "\n")
 
 	return contentStr, nil
-}
-
-// ProcessInput handles the complete input validation and reading pipeline
-func ProcessInput() (string, error) {
-	filename, err := ValidateArgs()
-	if err != nil {
-		return "", err
-	}
-
-	content, err := ReadFile(filename)
-	if err != nil {
-		return "", err
-	}
-
-	return content, nil
 }
