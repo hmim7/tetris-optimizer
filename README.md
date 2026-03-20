@@ -182,5 +182,18 @@ go run . samples/hardexam.txt
     go run . samples/ghost_block_trailing.txt
     go run . samples/non_uniform_blocks.txt
     ```
-
+- ***Good example cases***
+    ```go
+    go run . samples/goodexample04.txt
+    go run . samples/goodexample05.txt
+    go run . samples/goodexample06.txt
+    go run . samples/goodexample07.txt
+    go run . samples/goodexample08.txt
+    go run . samples/goodexample09.txt
+    go run . samples/goodexample10.txt
+    go run . samples/goodexample11.txt
+    go run . samples/goodexample12.txt
+    go run . samples/goodexample13.txt
+    go run . samples/goodexample14.txt
+    ```
 Expected behavior matches specifications in `docs/PRD.md`.
