@@ -8,9 +8,14 @@ import (
 // solvePiece represents a single tetromino with
 // its original input order and assigned letter for the backtracking solver.
 type solvePiece struct {
-	tetromino *Tetromino
-	index     int
-	letter    byte
+	tetromino   *Tetromino
+	index       int
+	letter      byte
+	mask        [4]uint16 // bitmask representation for fast placement
+	width       int
+	height      int
+	identicalTo int // Tracks if this shape is a duplicate to prune mirror states
+	placedPos   int
 }
 
 // Solve calculates the smallest square board that can contain all tetrominoes.
@@ -26,141 +31,119 @@ func Solve(tetrominoes []*Tetromino) ([]string, error) {
 	// Wrap tetrominoes in solvePiece to track their original order and assign letters.
 	pieces := make([]solvePiece, 0, len(tetrominoes))
 	for i, t := range tetrominoes {
+		var mask [4]uint16
+		for _, b := range t.Blocks {
+			mask[b.Row] |= (1 << b.Col)
+		}
+
+		// Pruning: Find if this piece is exactly identical to a previous one
+		identicalTo := -1
+		for j := i - 1; j >= 0; j-- {
+			if pieces[j].width == t.Width() && pieces[j].height == t.Height() && pieces[j].mask == mask {
+				identicalTo = j
+				break
+			}
+		}
+
 		pieces = append(pieces, solvePiece{
-			tetromino: t,
-			index:     i,
-			letter:    byte('A' + i),
+			tetromino:   t,
+			index:       i,
+			letter:      byte('A' + i),
+			mask:        mask,
+			width:       t.Width(),
+			height:      t.Height(),
+			identicalTo: identicalTo,
 		})
 	}
 
-	// Place pieces deterministically in input order (A, B, C...).
-
-	// Start searching from the absolute mathematical minimum size possible.
-	minSize := minimalSquareSize(len(pieces) * 4)
+	minSize := int(math.Ceil(math.Sqrt(float64(len(pieces) * 4))))
 	for size := minSize; ; size++ {
+		var boardMask [20]uint16 // 20 allows bounds safety without checks
 		board := make([]byte, size*size)
 		for i := range board {
 			board[i] = '.'
 		}
 
-		if backtrackPlace(board, size, pieces, 0) {
+		freeSpaces := size*size - len(pieces)*4
+		if backtrackPlace(board, &boardMask, size, pieces, 0, freeSpaces) {
 			return boardToStrings(board, size), nil
 		}
 	}
 }
 
-// minimalSquareSize returns the smallest integer side length needed to hold the total block count.
-func minimalSquareSize(blocks int) int {
-	return int(math.Ceil(math.Sqrt(float64(blocks))))
-}
-
 // backtrackPlace is a recursive function that attempts to place pieces one by one.
 // It uses depth-first search to find a valid board configuration.
-func backtrackPlace(board []byte, size int, pieces []solvePiece, pieceIndex int) bool {
+func backtrackPlace(board []byte, boardMask *[20]uint16, size int, pieces []solvePiece, pieceIndex int, freeSpaces int) bool {
 	// Base case: all pieces have been successfully placed on the board.
 	if pieceIndex == len(pieces) {
 		return true
 	}
 
-	// For larger boards, choose the most constrained piece among the remaining ones.
-	// This improves performance without affecting small-board deterministic outputs.
-	bestIdx := -1
-	swapped := false
-	if size >= 7 {
-		bestCount := math.MaxInt32
-		for i := pieceIndex; i < len(pieces); i++ {
-			count := possiblePlacementCount(board, size, pieces[i].tetromino)
-			if count == 0 {
-				return false
-			}
-			if bestIdx == -1 || count < bestCount || (count == bestCount && pieces[i].index < pieces[bestIdx].index) {
-				bestCount = count
-				bestIdx = i
-			}
-		}
-		if bestIdx != -1 && bestIdx != pieceIndex {
-			pieces[pieceIndex], pieces[bestIdx] = pieces[bestIdx], pieces[pieceIndex]
-			swapped = true
-		}
+	// --- PRUNING ---
+	// Flood fill to check if the remaining empty spaces can mathematically hold the remaining pieces.
+	if !isValidBoardStateMask(boardMask, size, freeSpaces) {
+		return false
 	}
 
-	piece := pieces[pieceIndex]
-	t := piece.tetromino
+	p := &pieces[pieceIndex]
+	maxRow := size - p.height
+	maxCol := size - p.width
 
-	// Pre-calculate boundary limits to avoid checking coordinates outside the board.
-	maxRow := size - t.Height()
-	maxCol := size - t.Width()
+	startRow := 0
+	startCol := 0
+	// If identical to a previous piece, force order to avoid exploring duplicate symmetrical states.
+	if p.identicalTo != -1 {
+		prevPos := pieces[p.identicalTo].placedPos
+		startRow = prevPos / size
+		startCol = prevPos % size
+	}
 
 	// Try every valid top-left coordinate for the current piece.
-	for row := 0; row <= maxRow; row++ {
-		for col := 0; col <= maxCol; col++ {
-			if !canPlaceAt(board, size, t, row, col) {
+	for row := startRow; row <= maxRow; row++ {
+		cStart := 0
+		if row == startRow {
+			cStart = startCol
+		}
+		for col := cStart; col <= maxCol; col++ {
+			// Fast bitmask collision check.
+			if (boardMask[row]&(p.mask[0]<<col)) != 0 ||
+				(boardMask[row+1]&(p.mask[1]<<col)) != 0 ||
+				(boardMask[row+2]&(p.mask[2]<<col)) != 0 ||
+				(boardMask[row+3]&(p.mask[3]<<col)) != 0 {
 				continue
 			}
 
-			// Place the piece, move to the next, and undo if the path leads to a dead end.
-			placeAt(board, size, t, row, col, piece.letter)
-			if backtrackPlace(board, size, pieces, pieceIndex+1) {
+			// Place piece in bitmask
+			boardMask[row] |= (p.mask[0] << col)
+			boardMask[row+1] |= (p.mask[1] << col)
+			boardMask[row+2] |= (p.mask[2] << col)
+			boardMask[row+3] |= (p.mask[3] << col)
+
+			// Place piece in byte board
+			for _, b := range p.tetromino.Blocks {
+				board[(row+b.Row)*size+(col+b.Col)] = p.letter
+			}
+
+			p.placedPos = row*size + col
+
+			if backtrackPlace(board, boardMask, size, pieces, pieceIndex+1, freeSpaces) {
 				return true
 			}
-			removeAt(board, size, t, row, col)
-		}
-	}
 
-	if swapped {
-		pieces[pieceIndex], pieces[bestIdx] = pieces[bestIdx], pieces[pieceIndex]
-	}
-	return false
-}
+			// Remove piece from bitmask
+			boardMask[row] &= ^(p.mask[0] << col)
+			boardMask[row+1] &= ^(p.mask[1] << col)
+			boardMask[row+2] &= ^(p.mask[2] << col)
+			boardMask[row+3] &= ^(p.mask[3] << col)
 
-// possiblePlacementCount counts how many positions a tetromino can be placed at
-// on the current board state.
-func possiblePlacementCount(board []byte, size int, t *Tetromino) int {
-	count := 0
-	maxRow := size - t.Height()
-	maxCol := size - t.Width()
-	for row := 0; row <= maxRow; row++ {
-		for col := 0; col <= maxCol; col++ {
-			if canPlaceAt(board, size, t, row, col) {
-				count++
+			// Remove piece from byte board
+			for _, b := range p.tetromino.Blocks {
+				board[(row+b.Row)*size+(col+b.Col)] = '.'
 			}
 		}
 	}
-	return count
-}
 
-// canPlaceAt checks if a tetromino's blocks overlap with existing pieces or the board edges.
-func canPlaceAt(board []byte, size int, t *Tetromino, startRow, startCol int) bool {
-	for _, block := range t.Blocks {
-		r := startRow + block.Row
-		c := startCol + block.Col
-		// Verify coordinates are within board bounds and target cell is empty.
-		if r < 0 || r >= size || c < 0 || c >= size {
-			return false
-		}
-		if board[r*size+c] != '.' {
-			return false
-		}
-	}
-	return true
-}
-
-// placeAt writes the piece's letter to the board for each of its four blocks.
-func placeAt(board []byte, size int, t *Tetromino, startRow, startCol int, letter byte) {
-	for _, block := range t.Blocks {
-		r := startRow + block.Row
-		c := startCol + block.Col
-		board[r*size+c] = letter
-	}
-}
-
-// removeAt clears the piece's blocks from the board, resetting them to '.' characters.
-func removeAt(board []byte, size int, t *Tetromino, startRow, startCol int) {
-	for _, block := range t.Blocks {
-		r := startRow + block.Row
-		c := startCol + block.Col
-		board[r*size+c] = '.'
-	}
+	return false
 }
 
 // boardToStrings converts the flat 1D byte board into a 2D-like slice of strings for final output.
@@ -170,4 +153,65 @@ func boardToStrings(board []byte, size int) []string {
 		out[r] = string(board[r*size : (r+1)*size])
 	}
 	return out
+}
+
+// isValidBoardStateMask uses flood fill on the bitmask to find empty connected components.
+// Since every tetromino occupies exactly 4 cells, an empty component
+// of size S will leave at least (S % 4) cells unfillable.
+// If the total unfillable cells exceed the number of free spaces, the board is invalid.
+func isValidBoardStateMask(boardMask *[20]uint16, size, freeSpaces int) bool {
+	var visited [20]uint16
+	unfillable := 0
+
+	var stack [512]uint16
+
+	for r := 0; r < size; r++ {
+		for c := 0; c < size; c++ {
+			if (boardMask[r]&(1<<c)) == 0 && (visited[r]&(1<<c)) == 0 {
+				compSize := 0
+				top := 1
+				stack[0] = uint16(r<<8 | c)
+				visited[r] |= (1 << c)
+
+				for top > 0 {
+					top--
+					curr := stack[top]
+					cr := int(curr >> 8)
+					cc := int(curr & 255)
+					compSize++
+
+					// Up
+					if cr > 0 && (boardMask[cr-1]&(1<<cc)) == 0 && (visited[cr-1]&(1<<cc)) == 0 {
+						visited[cr-1] |= (1 << cc)
+						stack[top] = uint16((cr-1)<<8 | cc)
+						top++
+					}
+					// Down
+					if cr < size-1 && (boardMask[cr+1]&(1<<cc)) == 0 && (visited[cr+1]&(1<<cc)) == 0 {
+						visited[cr+1] |= (1 << cc)
+						stack[top] = uint16((cr+1)<<8 | cc)
+						top++
+					}
+					// Left
+					if cc > 0 && (boardMask[cr]&(1<<(cc-1))) == 0 && (visited[cr]&(1<<(cc-1))) == 0 {
+						visited[cr] |= (1 << (cc - 1))
+						stack[top] = uint16(cr<<8 | (cc - 1))
+						top++
+					}
+					// Right
+					if cc < size-1 && (boardMask[cr]&(1<<(cc+1))) == 0 && (visited[cr]&(1<<(cc+1))) == 0 {
+						visited[cr] |= (1 << (cc + 1))
+						stack[top] = uint16(cr<<8 | (cc + 1))
+						top++
+					}
+				}
+
+				unfillable += compSize % 4
+				if unfillable > freeSpaces {
+					return false
+				}
+			}
+		}
+	}
+	return true
 }

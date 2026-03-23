@@ -114,15 +114,14 @@ The program outputs `ERROR` and exits for:
 - Disconnected blocks (diagonal-only connections invalid)
 - Missing or multiple separator lines between tetrominoes
 
-## Algorithm
+## Algorithm & Optimizations
 
-The solver uses **depth-first backtracking**:
+The core engine relies on a **depth-first backtracking** algorithm, heavily optimized to solve even the most complex configurations (up to 26 pieces) well within the required time limits. Key techniques include:
 
-1. Calculate minimum square size based on total blocks
-2. Attempt to place each tetromino sequentially
-3. Backtrack on conflicts
-4. Increment board size if no solution exists
-5. Return the smallest valid square
+1. **Iterative Deepening:** The board size starts at the absolute mathematical minimum (`⌈√(N × 4)⌉`) and dynamically grows only when a layout is mathematically proven impossible.
+2. **Bitmasking (Fast Collision Detection):** Tetrominoes and the board state are represented using `uint16` bitmasks. Checking if a piece fits is reduced to a single, lightning-fast CPU Bitwise AND operation.
+3. **Flood-Fill Pruning (Dead-end Detection):** During recursion, the algorithm uses Depth-First Search (DFS) to evaluate empty spaces. If a pocket of empty space is created that cannot be filled (e.g., modulo 4 check), the entire branch is instantly pruned.
+4. **Identical Piece Pruning:** The program detects duplicate tetromino shapes. By forcing a strict placement order for identical pieces, it avoids exploring millions of redundant symmetrical states.
 
 ## Performance
 
