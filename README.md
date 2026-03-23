@@ -131,6 +131,14 @@ The solver is designed to be efficient and has been tested against the following
 - **11 tetrominoes:** Solves in ≤ 3 seconds.
 - **12 tetrominoes:** Solves in ≤ 5 seconds.
 
+
+### Performance Timing
+
+To manually validate that the program meets the strict execution time limits (e.g., ≤ 5 seconds for 12 pieces), prefix the run command with the Unix `time` utility. Check the `real` time output:
+```bash
+time go run . samples/hardexam.txt
+```
+
 ## Implementation
 
 The program follows a modular pipeline architecture:
@@ -196,3 +204,14 @@ go run . samples/hardexam.txt
     go run . samples/goodexample14.txt
     ```
 Expected behavior matches specifications in `docs/PRD.md`.
+
+### Validation & Test Coverage
+
+To verify the automated test coverage of the project across all packages (aiming for ≥ 80%), use the built-in Go test tool:
+```bash
+go test ./... -coverpkg=./...
+```
+
+## License
+
+This project is licensed under the MIT License.     Part of the Zone01 School curriculum.
