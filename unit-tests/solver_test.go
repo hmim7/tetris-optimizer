@@ -91,7 +91,7 @@ func TestSolve_GoldenSizesAndDots(t *testing.T) {
 }
 
 func TestSolve_SampleTxt_ExactOutput(t *testing.T) {
-	content, err := modules.ReadFile(filepath.Join("..", "sample.txt"))
+	content, err := modules.ReadFile(filepath.Join("..", "samples", "sample.txt"))
 	if err != nil {
 		t.Fatalf("ReadFile() error: %v", err)
 	}
