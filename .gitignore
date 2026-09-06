@@ -7,14 +7,13 @@
 *.dylib
 
 # the current building program
-tetris-optimizer
+/tetris-optimizer
 *.gocache
 *.guides
 .gitignore
 cover.out
 coverage.out
 tetris-optimizer_audit.md
-sample.txt
 Project_Rules/
 
 # === VS Code ===

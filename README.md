@@ -15,10 +15,10 @@ go run . <inputFile>
 ### Example
 
 ```go
-go run . sample.txt
+go run . samples/sample.txt
 ```
 
-**Input (`sample.txt`):**
+**Input (`samples/sample.txt`):**
 ```
 ...#
 ...#
@@ -168,7 +168,7 @@ CLI Args -> Input Reader -> Parser -> Validator -> Solver -> Output
 Run the program against provided test cases:
 
 ```go
-go run . sample.txt
+go run . samples/sample.txt
 go run . samples/hardexam.txt
 ```
 - ***Errored cases:***
