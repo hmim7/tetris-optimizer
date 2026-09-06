@@ -12,6 +12,10 @@ tetris-optimizer
 *.guides
 .gitignore
 cover.out
+coverage.out
+tetris-optimizer_audit.md
+sample.txt
+Project_Rules/
 
 # === VS Code ===
 .vscode/
@@ -24,3 +28,4 @@ Thumbs.db
 # === Logs ===
 *.log
 temp/
+
